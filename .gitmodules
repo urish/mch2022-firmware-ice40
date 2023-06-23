@@ -16,3 +16,6 @@
 [submodule "tools"]
 	path = tools
 	url = https://github.com/badgeteam/mch2022-tools.git
+[submodule "projects/cdc/rtl/usb_cdc"]
+	path = projects/cdc/rtl/usb_cdc
+	url = https://github.com/ulixxe/usb_cdc/
