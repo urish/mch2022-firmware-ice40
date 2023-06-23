@@ -53,7 +53,9 @@ module top (
 
   wire red, green, blue;
 
-  assign {blue, green, red} = counter[25:23] ^ counter[25:24];
+  assign blue = (counter[23] & ~configured_o);
+  assign green = configured_o;
+  assign red = 0;
 
   // ----------------------------------------------------------
   // Instantiate iCE40 LED driver hard logic.
@@ -120,7 +122,7 @@ module top (
 
   SB_IO #(
       .PIN_TYPE(6'b1010_01)
-  ) iocnt0 (
+  ) io_dp (
       .PACKAGE_PIN(pmod[0]),
       .OUTPUT_ENABLE(usb_tx_en),
       .D_IN_0(dp_rx_i),
@@ -130,7 +132,7 @@ module top (
   );
   SB_IO #(
       .PIN_TYPE(6'b1010_01)
-  ) iocnt1 (
+  ) io_dn (
       .PACKAGE_PIN(pmod[1]),
       .OUTPUT_ENABLE(usb_tx_en),
       .D_IN_0(dn_rx_i),
@@ -140,44 +142,11 @@ module top (
   );
   SB_IO #(
       .PIN_TYPE(6'b1010_00)
-  ) iocnt2 (
+  ) io_pu_o (
       .PACKAGE_PIN(pmod[2]),
       .OUTPUT_ENABLE(1),
-      .D_OUT_0(index),
-      .INPUT_CLK(clk_4x)
-  );
-  SB_IO #(
-      .PIN_TYPE(6'b1010_00)
-  ) iocnt3 (
-      .PACKAGE_PIN(pmod[3]),
-      .OUTPUT_ENABLE(1),
       .D_OUT_0(dp_pu_o),
-      .INPUT_CLK(clk_4x)
-  );
-  SB_IO #(
-      .PIN_TYPE(6'b1010_00)
-  ) iocnt4 (
-      .PACKAGE_PIN(pmod[4]),
-      .OUTPUT_ENABLE(1),
-      .D_OUT_0(dp_tx_o),
-      .INPUT_CLK(1'b0),
-      .LATCH_INPUT_VALUE(1'b0)
-  );
-  SB_IO #(
-      .PIN_TYPE(6'b1010_00)
-  ) iocnt6 (
-      .PACKAGE_PIN(pmod[6]),
-      .OUTPUT_ENABLE(1),
-      .D_OUT_0(configured_o),
-      .INPUT_CLK(clk_4x)
-  );
-  SB_IO #(
-      .PIN_TYPE(6'b1010_00)
-  ) iocnt7 (
-      .PACKAGE_PIN(pmod[7]),
-      .OUTPUT_ENABLE(1),
-      .D_OUT_0(clk_4x),
-      .INPUT_CLK(clk_4x)
+      .INPUT_CLK(clk)
   );
 
   wire [7:0] out_data;
